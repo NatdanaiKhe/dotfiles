@@ -5,15 +5,19 @@ set -euo pipefail
 # manifests/flatpaks.txt hash: {{ include "manifests/flatpaks.txt" | sha256sum }}
 
 if command -v flatpak >/dev/null 2>&1; then
-  echo "==> Configuring Flatpak and flathub..."
+  echo "==> Checking Flatpak remote..."
   flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
 
-  echo "==> Installing Flatpak applications..."
+  echo "==> Checking Flatpak applications..."
   while IFS= read -r app || [ -n "$app" ]; do
     [ -z "$app" ] && continue
     [[ "$app" =~ ^# ]] && continue
-    echo "--> Installing $app..."
-    flatpak install -y --noninteractive flathub "$app" || true
+    if flatpak info "$app" >/dev/null 2>&1; then
+      echo "--> Flatpak $app already installed, skipping."
+    else
+      echo "--> Installing $app..."
+      flatpak install -y --noninteractive flathub "$app" || true
+    fi
   done < "{{ .chezmoi.sourceDir }}/manifests/flatpaks.txt"
 fi
 {{ end }}

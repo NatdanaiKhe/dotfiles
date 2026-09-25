@@ -9,19 +9,37 @@ echo "==> Reconciling system packages..."
 if [ -f /etc/os-release ]; then
   . /etc/os-release
   if [ "${ID:-}" = "fedora" ] || [[ "${ID_LIKE:-}" == *fedora* ]]; then
-    # Enable COPRs
     if command -v dnf >/dev/null 2>&1; then
       echo "==> Checking COPR repositories..."
       while IFS= read -r copr || [ -n "$copr" ]; do
         [ -z "$copr" ] && continue
         [[ "$copr" =~ ^# ]] && continue
-        echo "--> Enabling COPR: $copr"
-        sudo dnf copr enable -y "$copr" || true
+        
+        # Check if already present in /etc/yum.repos.d
+        copr_pattern=$(echo "$copr" | tr '/' ':')
+        if ls /etc/yum.repos.d/*"$copr_pattern"* >/dev/null 2>&1; then
+          echo "--> COPR $copr already active, skipping."
+        else
+          echo "--> Enabling COPR: $copr"
+          sudo dnf copr enable -y "$copr" || true
+        fi
       done < "{{ .chezmoi.sourceDir }}/manifests/copr.txt"
 
-      echo "==> Installing packages from dnf.txt..."
+      echo "==> Checking packages from dnf.txt..."
       mapfile -t PKGS < <(grep -v -e '^\s*#' -e '^\s*$' "{{ .chezmoi.sourceDir }}/manifests/dnf.txt")
-      sudo dnf install -y "${PKGS[@]}"
+      MISSING_PKGS=()
+      for pkg in "${PKGS[@]}"; do
+        if ! rpm -q "$pkg" >/dev/null 2>&1; then
+          MISSING_PKGS+=("$pkg")
+        fi
+      done
+
+      if [ ${#MISSING_PKGS[@]} -gt 0 ]; then
+        echo "==> Installing missing packages: ${MISSING_PKGS[*]}..."
+        sudo dnf install -y "${MISSING_PKGS[@]}"
+      else
+        echo "==> All packages in dnf.txt are already installed."
+      fi
     fi
   fi
 fi
