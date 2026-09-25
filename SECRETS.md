@@ -54,14 +54,34 @@ Store your `~/.ssh/` private keys in your password manager or encrypted offline 
 
 ## 🚀 CLI Bulk Import Helper
 
-If you prefer to add them via the Infisical CLI all at once instead of typing them into the web dashboard:
-
-```sh
-# Connect to your workstation project
-infisical init
-
-# Bulk import from ~/.config/fish/conf.d/secrets.fish
-grep '^set -x' ~/.config/fish/conf.d/secrets.fish | grep -v 'CF_' | grep -v 'INFISICAL_' | while read -r _ _ key val;
-  infisical secrets set "$key=$val" --env=dev
+### 1. Import Environment Secrets
+```fish
+# Bulk import API keys from ~/.config/fish/conf.d/secrets.fish
+grep '^set -x' ~/.config/fish/conf.d/secrets.fish | grep -v 'CF_' | grep -v 'INFISICAL_' | while read -r _ _ key val
+    infisical secrets set "$key=$val" --env=dev
 end
 ```
+
+### 2. Import SSH Private Keys
+Infisical supports file paths directly via the `@/path/to/file` syntax:
+
+```fish
+# Upload all 5 SSH private keys
+for key in deploy_homelab github google_compute_engine home ssh-oci-key.key
+    set var_name (string upper "SSH_KEY_"(string replace -a '-' '_' (string replace -a '.' '_' $key)))
+    echo "Uploading $key as $var_name..."
+    infisical secrets set "$var_name=@$HOME/.ssh/$key" --env=dev
+end
+```
+
+### 3. Restore SSH Keys on a New Machine
+```fish
+mkdir -p ~/.ssh; and chmod 700 ~/.ssh
+for key in deploy_homelab github google_compute_engine home ssh-oci-key.key
+    set var_name (string upper "SSH_KEY_"(string replace -a '-' '_' (string replace -a '.' '_' $key)))
+    echo "Restoring $key..."
+    infisical secrets get $var_name --plain > ~/.ssh/$key
+end
+chmod 600 ~/.ssh/*
+```
+
