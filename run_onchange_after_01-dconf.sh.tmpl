@@ -1,0 +1,11 @@
+{{ if not .headless }}
+#!/usr/bin/env bash
+set -euo pipefail
+
+# dconf/dconf.ini hash: {{ include "dconf/dconf.ini" | sha256sum }}
+
+if command -v dconf >/dev/null 2>&1; then
+  echo "==> Loading curated GNOME settings (dconf)..."
+  dconf load / < "{{ .chezmoi.sourceDir }}/dconf/dconf.ini" || true
+fi
+{{ end }}

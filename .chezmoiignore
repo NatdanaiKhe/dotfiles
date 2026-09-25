@@ -1,0 +1,13 @@
+hardware/**
+manifests/**
+dconf/**
+README.md
+.git/**
+
+{{ if .headless }}
+.config/ghostty/**
+.local/share/fonts/**
+run_onchange_before_02-flatpaks.sh
+run_onchange_after_01-dconf.sh
+run_onchange_after_02-theme.sh
+{{ end }}

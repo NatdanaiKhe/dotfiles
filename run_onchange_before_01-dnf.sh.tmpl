@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# manifests/dnf.txt hash: {{ include "manifests/dnf.txt" | sha256sum }}
+# manifests/copr.txt hash: {{ include "manifests/copr.txt" | sha256sum }}
+
+echo "==> Reconciling system packages..."
+
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  if [ "${ID:-}" = "fedora" ] || [[ "${ID_LIKE:-}" == *fedora* ]]; then
+    # Enable COPRs
+    if command -v dnf >/dev/null 2>&1; then
+      echo "==> Checking COPR repositories..."
+      while IFS= read -r copr || [ -n "$copr" ]; do
+        [ -z "$copr" ] && continue
+        [[ "$copr" =~ ^# ]] && continue
+        echo "--> Enabling COPR: $copr"
+        sudo dnf copr enable -y "$copr" || true
+      done < "{{ .chezmoi.sourceDir }}/manifests/copr.txt"
+
+      echo "==> Installing packages from dnf.txt..."
+      mapfile -t PKGS < <(grep -v -e '^\s*#' -e '^\s*$' "{{ .chezmoi.sourceDir }}/manifests/dnf.txt")
+      sudo dnf install -y "${PKGS[@]}"
+    fi
+  fi
+fi
+
+# Ensure fish is default shell
+if command -v fish >/dev/null 2>&1; then
+  FISH_PATH="$(command -v fish)"
+  if [ "${SHELL:-}" != "$FISH_PATH" ]; then
+    echo "==> Setting Fish as default shell..."
+    chsh -s "$FISH_PATH" || sudo chsh -s "$FISH_PATH" "$USER" || true
+  fi
+fi
+
+# Install Bun if missing
+if ! command -v bun >/dev/null 2>&1 && [ ! -d "$HOME/.bun" ]; then
+  echo "==> Installing Bun..."
+  curl -fsSL https://bun.sh/install | bash || true
+fi
+
+# Install uv if missing
+if ! command -v uv >/dev/null 2>&1; then
+  echo "==> Installing uv..."
+  curl -LsSf https://astral.sh/uv/install.sh | sh || true
+fi

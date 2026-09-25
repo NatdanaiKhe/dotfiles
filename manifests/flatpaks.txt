@@ -1,0 +1,8 @@
+com.spotify.Client
+md.obsidian.Obsidian
+io.beekeeperstudio.Studio
+io.podman_desktop.PodmanDesktop
+it.mijorus.gearlever
+me.iepure.devtoolbox
+org.gitfourchette.gitfourchette
+com.mattjakeman.ExtensionManager

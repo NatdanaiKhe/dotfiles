@@ -1,0 +1,19 @@
+{{ if not .headless }}
+#!/usr/bin/env bash
+set -euo pipefail
+
+# manifests/flatpaks.txt hash: {{ include "manifests/flatpaks.txt" | sha256sum }}
+
+if command -v flatpak >/dev/null 2>&1; then
+  echo "==> Configuring Flatpak and flathub..."
+  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
+
+  echo "==> Installing Flatpak applications..."
+  while IFS= read -r app || [ -n "$app" ]; do
+    [ -z "$app" ] && continue
+    [[ "$app" =~ ^# ]] && continue
+    echo "--> Installing $app..."
+    flatpak install -y --noninteractive flathub "$app" || true
+  done < "{{ .chezmoi.sourceDir }}/manifests/flatpaks.txt"
+fi
+{{ end }}

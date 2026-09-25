@@ -1,0 +1,18 @@
+{{ if not .headless }}
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "==> Updating font cache..."
+if command -v fc-cache >/dev/null 2>&1; then
+  fc-cache -f "$HOME/.local/share/fonts" || true
+fi
+
+# Ensure WhiteSur theme is installed
+if [ ! -d "$HOME/.themes/WhiteSur-Dark-solid" ]; then
+  echo "==> Installing WhiteSur GTK theme..."
+  THEME_TMP=$(mktemp -d)
+  git clone --depth=1 https://github.com/vinceliuice/WhiteSur-gtk-theme.git "$THEME_TMP"
+  "$THEME_TMP/install.sh" -d "$HOME/.themes" -c Dark -s solid -m || true
+  rm -rf "$THEME_TMP"
+fi
+{{ end }}

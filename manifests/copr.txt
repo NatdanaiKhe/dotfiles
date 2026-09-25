@@ -1,0 +1,2 @@
+scottames/ghostty
+atim/lazygit

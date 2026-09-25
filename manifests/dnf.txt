@@ -1,0 +1,37 @@
+# Shell & Utilities
+fish
+util-linux-user
+zoxide
+fzf
+ripgrep
+fd-find
+eza
+bat
+btop
+tree
+jq
+wget
+curl
+ca-certificates
+unzip
+zip
+
+# Git & Development
+git
+gh
+lazygit
+gcc
+make
+autoconf
+bison
+openssl-devel
+readline-devel
+zlib-devel
+libcurl-devel
+libffi-devel
+pkgconf-pkg-config
+
+# Containers & Terminals
+podman
+podman-compose
+ghostty

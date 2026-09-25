@@ -1,0 +1,9 @@
+# Global gitignore — used by all repos via core.excludesfile in dotfiles/gitconfig.
+.DS_Store
+*.log
+.env
+node_modules/
+__pycache__/
+*.swp
+.idea/
+.vscode/

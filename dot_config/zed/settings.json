@@ -1,0 +1,256 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "cli_default_open_behavior": "existing_window",
+  "diff_view_style": "split",
+  "proxy": "",
+  "outline_panel": {
+    "dock": "left",
+  },
+  "collaboration_panel": {
+    "dock": "left",
+  },
+  "git_panel": {
+    "dock": "left",
+    "tree_view": true,
+  },
+
+  "auto_install_extensions": {
+    "git-firefly": true,
+    "markdown-oxide": true,
+    "markdownlint": true,
+    "dockerfile": true,
+    "html": true,
+    "catppuccin-icons": true
+  },
+
+  "language_models": {
+    "openai_compatible": {
+      "Cerebras": {
+        "api_url": "https://api.cerebras.ai/v1",
+        "available_models": [
+          {
+            "name": "gpt-oss-120b",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "max_completion_tokens": 200000,
+            "reasoning_effort": "medium",
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": false,
+              "prompt_cache_key": true,
+              "chat_completions": true,
+              "interleaved_reasoning": false,
+              "max_tokens_parameter": false
+            }
+          }
+        ]
+      }
+    },
+    "opencode": {
+      "show_go_models": true,
+      "show_zen_models": false
+    },
+    "deepseek": {
+      "api_url": "https://api.deepseek.com/v1",
+      "available_models": [
+        {
+          "name": "deepseek-v4-flash",
+          "display_name": "DeepSeek V4 Flash",
+          "max_tokens": 1000000,
+          "max_output_tokens": 384000,
+        },
+        {
+          "name": "deepseek-v4-pro",
+          "display_name": "DeepSeek V4 Pro",
+          "max_tokens": 1000000,
+          "max_output_tokens": 384000,
+        },
+      ],
+    },
+    "ollama": {
+      "api_url": "http://localhost:11434",
+    },
+  },
+
+  "text_rendering_mode": "platform_default",
+  "agent": {
+    "auto_compact": {
+      "threshold": "90%"
+    },
+    "play_sound_when_agent_done": "when_hidden",
+    "tool_permissions": {
+      "tools": {
+        "delete_path": {
+          "default": "confirm",
+        },
+      },
+    },
+    "dock": "right",
+    "default_profile": "ask",
+    "default_model": {
+      "effort": "high",
+      "provider": "opencode",
+      "model": "go/mimo-v2.5",
+      "enable_thinking": true,
+    },
+    "favorite_models": [
+      {
+        "provider": "ollama",
+        "model": "gemma4:31b-cloud",
+        "enable_thinking": false
+      },
+      {
+        "provider": "deepseek",
+        "model": "deepseek-v4-flash",
+        "enable_thinking": false
+      }
+    ],
+    "profiles": {
+      "ask": {
+        "name": "Ask",
+        "tools": {
+          "read_file": true,
+          "grep": true,
+          "terminal": false,
+          "edit_file": false,
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {},
+      },
+    },
+    "model_parameters": [],
+  },
+  "terminal": {
+    "shell": "system",
+    "font_size": 14.0,
+  },
+  "languages": {
+    "C++": {
+      "show_edit_predictions": true
+    },
+    "JavaScript": {
+      "format_on_save": "on",
+    },
+    "TypeScript": {
+      "format_on_save": "on",
+    },
+    "TSX": {
+      "format_on_save": "on",
+    },
+    "JSON": {
+      "format_on_save": "on",
+    },
+    "CSS": {
+      "format_on_save": "on",
+    },
+    "HTML": {
+      "format_on_save": "on",
+    },
+    "Markdown": {
+      "format_on_save": "on",
+    },
+    "YAML": {
+      "format_on_save": "on",
+    },
+    "Go": {
+      "format_on_save": "on",
+    },
+    "Python": {
+      "show_edit_predictions": false,
+      "language_servers": ["pyright", "ruff"],
+      "format_on_save": "on",
+    },
+  },
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+      },
+      "enable_lsp_tasks": true,
+    },
+  },
+  "edit_predictions": {
+    "codestral": {
+      "api_url": "",
+      "model": "",
+    },
+    "ollama": {
+      "model": "gemma4:31b-cloud",
+      "prompt_format": "infer",
+      "max_output_tokens": 512,
+    },
+    "provider": "zed",
+  },
+  "project_panel": {
+    "indent_size": 10.0,
+    "dock": "left",
+    "entry_spacing": "standard",
+  },
+  "git": {
+    "git_gutter": "tracked_files",
+  },
+  "tabs": {
+    "show_close_button": "hover",
+  },
+  "ui_font_family": ".SystemUIFont",
+  "buffer_line_height": "standard",
+  "buffer_font_family": "Cascadia Code",
+  "buffer_font_features": {
+    "calt": false,
+  },
+  "show_whitespaces": "none",
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware",
+  },
+  "sticky_scroll": {
+    "enabled": false,
+  },
+  "icon_theme": "Material Icon Theme",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
+  "base_keymap": "VSCode",
+  "minimap": {
+    "show": "auto",
+  },
+  "file_types": {},
+  "ui_font_size": 16.0,
+  "buffer_font_size": 16.0,
+  "theme": "VSCode Dark Modern",
+  "context_servers": {
+    "mcp-server-context7": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        "context7_api_key": ""
+      }
+    },
+    "mcp-server-github": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        // TODO: set GITHUB_PERSONAL_ACCESS_TOKEN env var or use command field
+        "github_personal_access_token": ""
+      }
+    }
+  },
+}

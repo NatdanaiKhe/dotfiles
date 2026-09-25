@@ -1,0 +1,8 @@
+{{- $headless := promptBoolOnce . "headless" "Is this machine headless (server/cloud without GUI)?" false -}}
+{{- $email := promptStringOnce . "email" "Email address for git" "natdanai.khemt@gmail.com" -}}
+{{- $name := promptStringOnce . "name" "Your name for git" "Natdanai Khemt" -}}
+
+[data]
+    headless = {{ $headless }}
+    email = {{ $email | quote }}
+    name = {{ $name | quote }}

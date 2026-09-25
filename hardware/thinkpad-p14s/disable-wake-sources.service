@@ -1,0 +1,10 @@
+[Unit]
+Description=Disable unnecessary ACPI wake sources to reduce suspend battery drain
+After=suspend.service sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/natdanai/cmd/disable-wake-sources
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Re-exec via sudo if not running as root
+if [[ $EUID -ne 0 ]]; then
+    exec sudo "$0" "$@"
+fi
+
+WAKE_DEVICES=(TXHC TDM0 TDM1 TRP0 TRP2 GLAN)
+
+echo "=== Disabling unnecessary ACPI wake sources ==="
+echo
+
+for DEV in "${WAKE_DEVICES[@]}"; do
+    # Find the line for this device in /proc/acpi/wakeup.
+    # NB: grep -w matches whole-word so "TRP0" won't match "TRP01".
+    LINE=$(grep -w "^${DEV}[[:space:]]" /proc/acpi/wakeup || true)
+
+    if [[ -z "$LINE" ]]; then
+        echo "${DEV}: not present in wakeup table, skipping"
+        continue
+    fi
+
+    # Status column contains either "*enabled" or "*disabled"
+    if echo "$LINE" | grep -q '\*disabled'; then
+        echo "${DEV}: already disabled, skipping"
+        continue
+    fi
+
+    echo "${DEV}: was enabled, disabling..."
+    echo "$DEV" > /proc/acpi/wakeup
+done
+
+echo
+echo "=== Final /proc/acpi/wakeup table ==="
+cat /proc/acpi/wakeup
+
+exit 0
