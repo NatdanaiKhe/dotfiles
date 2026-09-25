@@ -32,6 +32,9 @@ Zero secrets or API keys are stored in Git.
    This automatically generates `~/.config/fish/conf.d/secrets.fish` (with `chmod 600`) so all terminal sessions load tokens with zero shell latency.
 3. Import your SSH keys (`~/.ssh/`) from your encrypted password manager or offline key backup.
 
+See [SECRETS.md](SECRETS.md) for the complete list of secret keys to add to Infisical and the Cloudflare Access bootstrap requirements.
+
+
 ---
 
 ## 📦 What's Managed
